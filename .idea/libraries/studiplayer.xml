@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="studiplayer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/studiplayer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/studiplayer.jar!/" />
+    </SOURCES>
+  </library>
+</component>
