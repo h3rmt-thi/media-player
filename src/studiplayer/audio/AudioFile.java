@@ -1,3 +1,5 @@
+package studiplayer.audio;
+
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,16 +12,16 @@ public abstract class AudioFile {
     private String title;
     private String extension;
 
-    AudioFile(String path) {
+    public AudioFile(String path) throws NotPlayableException {
         this.parsePathname(path);
         this.parseFilename(this.filename);
         File file = new File(this.pathname);
         if (!file.exists() || !file.canRead()) {
-            throw new IllegalArgumentException("File does not exist or is not readable");
+            throw new NotPlayableException(this.pathname, "File does not exist or is not readable");
         }
     }
 
-    AudioFile() {
+    public AudioFile() {
     }
 
     private static boolean isWindows() {
@@ -134,14 +136,14 @@ public abstract class AudioFile {
 
     @Override
     public String toString() {
-        if (this.getAuthor().isEmpty()) {
+        if (this.getAuthor() == null || this.getAuthor().isEmpty()) {
             return this.getTitle();
         } else {
             return this.getAuthor() + " - " + this.getTitle();
         }
     }
 
-    abstract public void play();
+    abstract public void play() throws NotPlayableException;
 
     abstract public void togglePause();
 

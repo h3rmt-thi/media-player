@@ -1,3 +1,6 @@
+package studiplayer.cert;
+
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -8,6 +11,11 @@ import java.util.Hashtable;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import studiplayer.audio.AudioFile;
+import studiplayer.audio.NotPlayableException;
+import studiplayer.audio.TaggedFile;
+import studiplayer.audio.WavFile;
 
 public class AudioFileTest {
 
@@ -27,7 +35,7 @@ public class AudioFileTest {
             f1 = new WavFile("audiofiles/wellenmeister - tranquility.wav");
             f2 = new TaggedFile("audiofiles/Rock 812.mp3");
             f3 = new TaggedFile("audiofiles/wellenmeister_awakening.ogg");
-        } catch (Exception e) {
+        } catch (NotPlayableException e) {
         	fail("Problem beim Erzeugen der AudioFile-Objekte: " + e.getMessage());
         }
     }
@@ -87,13 +95,13 @@ public class AudioFileTest {
         try {
             new WavFile("does not exist.wav");
             fail("Expecting exception due to a non-existing file");
-        } catch (RuntimeException e) {
+        } catch (NotPlayableException e) {
             // Expected
         }
         try {
             new TaggedFile("does not exist.mp3");
             fail("Expecting exception due to a non-existing file");
-        } catch (RuntimeException e) {
+        } catch (NotPlayableException e) {
          // Expected
         }
     }
@@ -139,10 +147,10 @@ public class AudioFileTest {
         // We expect that title is derived from filename!
         try {
             f = new TaggedFile("audiofiles/kein.wav.sondern.ogg");
+        } catch (NotPlayableException e) {
+            fail("File does not exist " + e);
         } catch (NullPointerException e) {
             fail("NullPointerException for TaggedFile with null tags");
-        } catch (RuntimeException e) {
-            fail("File does not exist " + e);
         }
         assertEquals("Wrong author", "", f.getAuthor());
         assertEquals("Wrong title", "kein.wav.sondern", f.getTitle());

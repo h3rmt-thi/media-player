@@ -1,3 +1,5 @@
+package studiplayer.cert;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -7,6 +9,10 @@ import java.lang.reflect.Modifier;
 import org.junit.Before;
 import org.junit.Test;
 
+import studiplayer.audio.NotPlayableException;
+import studiplayer.audio.SampledFile;
+import studiplayer.audio.TaggedFile;
+import studiplayer.audio.WavFile;
 import studiplayer.basic.BasicPlayer;
 
 public class SampledFileTest {
@@ -25,15 +31,15 @@ public class SampledFileTest {
             f1 = new TaggedFile("audiofiles/Rock 812.mp3");
             f2 = new WavFile("audiofiles/wellenmeister - tranquility.wav");
             f3 = new TaggedFile("audiofiles/wellenmeister_awakening.ogg");
-        } catch (Exception e) {
-        	fail("Problem creating AudioFile objects: " + e.getMessage());
+        } catch (NotPlayableException e) {
+        	fail("Problem beim Erzeugen der AudioFile-Objekte: " + e.getMessage());
         }
     }
 
     @Test
     public void testSuperClass() {
         assertEquals("SampledFile ist not derived from AudioFile",
-                "AudioFile", clazz.getSuperclass().getName());
+                "studiplayer.audio.AudioFile", clazz.getSuperclass().getName());
     }
 
     @Test
@@ -142,7 +148,7 @@ public class SampledFileTest {
             public void run() {
                 try {
                     f1.play();
-                } catch (RuntimeException e) {
+                } catch (NotPlayableException e) {
                     fail("Cannot play " + f1 + " " + e);
                 }
             }

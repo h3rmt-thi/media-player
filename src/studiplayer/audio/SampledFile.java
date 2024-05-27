@@ -1,9 +1,11 @@
+package studiplayer.audio;
+
 import studiplayer.basic.BasicPlayer;
 
 public abstract class SampledFile extends AudioFile {
     private long duration;
 
-    SampledFile(String path) {
+    SampledFile(String path) throws NotPlayableException {
         super(path);
     }
 
@@ -29,8 +31,12 @@ public abstract class SampledFile extends AudioFile {
     }
 
     @Override
-    public void play() {
-        BasicPlayer.play(this.getPathname());
+    public void play() throws NotPlayableException {
+        try {
+            BasicPlayer.play(this.getPathname());
+        } catch (Exception e) {
+            throw new NotPlayableException(this.getPathname(), e);
+        }
     }
 
     @Override

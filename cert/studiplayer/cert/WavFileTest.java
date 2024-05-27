@@ -1,3 +1,5 @@
+package studiplayer.cert;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -5,27 +7,30 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
+import studiplayer.audio.NotPlayableException;
+import studiplayer.audio.WavFile;
+
 public class WavFileTest {
     @SuppressWarnings("rawtypes")
     private Class clazz = WavFile.class;
     private WavFile f1;
 
     @Before
-    public void setup() {
+    public void setup() { 
     	// Initializer block
     	// This checks the proper connection of constructors already
 
         try {
             f1 = new WavFile("audiofiles/wellenmeister - tranquility.wav");
-        } catch (Exception e) {
-        	fail("Problem creating AudioFile objects: " + e.getMessage());
+        } catch (NotPlayableException e) {
+        	fail("Problem beim Erzeugen der AudioFile-Objekte: " + e.getMessage());
         }
     }
 
     @Test
     public void testSuperClass() {
         assertEquals("WavFile ist not derived from SampledFile",
-                "SampledFile", clazz.getSuperclass()
+                "studiplayer.audio.SampledFile", clazz.getSuperclass()
                         .getName());
     }
 
@@ -78,9 +83,14 @@ public class WavFileTest {
     public void testInvalid() {
         try {
             new WavFile("audiofiles/wellenmeister - tranquility.cut.wav");
-            fail("RuntimeException expected for erroneous WAV file wellenmeister - tranquility.cut.wav");
-        } catch (RuntimeException e) {
+            fail("NotPlayableException expected for erroneous WAV file wellenmeister - tranquility.cut.wav");
+        } catch (NotPlayableException e) {
             // Expected
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            // RuntimeException of studiplayer.basic.WavParamReader.readParams
+            // was not mapped to NotPlayableException
+            fail("NotPlayableException expected for erroneous WAV file wellenmeister - tranquility.cut.wav");
         }
     }
 
